@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Siswa - App Sekolah Menabung</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand"><i class="fa-solid fa-piggy-bank"></i> Sekolah Menabung</div>
+    <nav class="nav flex-column py-2">
+      <a class="nav-link" href="dashboard.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+      <div class="nav-section-title">Data Master</div>
+      <a class="nav-link" href="siswa.html" data-role="admin"><i class="fa-solid fa-user-graduate"></i> Data Siswa</a>
+      <a class="nav-link" href="kelas.html" data-role="admin"><i class="fa-solid fa-chalkboard"></i> Data Kelas</a>
+      <a class="nav-link" href="pengguna.html" data-role="admin"><i class="fa-solid fa-users-gear"></i> Data Pengguna</a>
+      <div class="nav-section-title">Tabungan</div>
+      <a class="nav-link" href="transaksi.html" data-role="admin,petugas"><i class="fa-solid fa-money-bill-transfer"></i> Transaksi</a>
+      <a class="nav-link" href="tabungan.html"><i class="fa-solid fa-book"></i> Buku Tabungan</a>
+      <a class="nav-link" href="laporan.html" data-role="admin,petugas,walikelas"><i class="fa-solid fa-chart-line"></i> Laporan</a>
+      <div class="nav-section-title">Akun</div>
+      <a class="nav-link" href="profil.html"><i class="fa-solid fa-id-card"></i> Profil</a>
+      <a class="nav-link" href="pengaturan.html" data-role="admin"><i class="fa-solid fa-gear"></i> Pengaturan</a>
+      <a class="nav-link" href="#" id="btnLogout"><i class="fa-solid fa-right-from-bracket"></i> Keluar</a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-sm btn-outline-secondary d-lg-none" id="btnToggleSidebar"><i class="fa-solid fa-bars"></i></button>
+        <h5 class="mb-0 fw-bold">Data Siswa</h5>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <div class="text-end d-none d-sm-block">
+          <div class="fw-semibold user-display-name">-</div>
+          <div class="small text-muted user-display-role">-</div>
+        </div>
+        <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <div class="card">
+        <div class="card-header d-flex flex-wrap gap-2 justify-content-between align-items-center">
+          <div class="d-flex gap-2 flex-wrap">
+            <input type="text" class="form-control form-control-sm" style="width:220px" id="searchSiswa" placeholder="Cari nama / NIS...">
+            <select class="form-select form-select-sm" style="width:180px" id="filterKelas">
+              <option value="">Semua Kelas</option>
+            </select>
+          </div>
+          <button class="btn btn-primary btn-sm" id="btnTambahSiswa"><i class="fa-solid fa-plus me-1"></i>Tambah Siswa</button>
+        </div>
+        <div class="table-responsive">
+          <table class="table mb-0">
+            <thead>
+              <tr><th>NIS</th><th>Nama</th><th>Kelas</th><th>Jenis Kelamin</th><th>Saldo</th><th>Status</th><th>Aksi</th></tr>
+            </thead>
+            <tbody id="tblSiswa">
+              <tr><td colspan="7" class="text-center text-muted py-4">Memuat data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FORM SISWA -->
+<div class="modal fade" id="modalSiswa" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="formSiswa">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalSiswaTitle">Tambah Siswa</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="siswaId">
+          <div class="mb-3">
+            <label class="form-label">NIS</label>
+            <input type="text" class="form-control" id="siswaNis" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nama Lengkap</label>
+            <input type="text" class="form-control" id="siswaNama" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Kelas</label>
+            <select class="form-select" id="siswaKelas" required></select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Jenis Kelamin</label>
+            <select class="form-select" id="siswaJk" required>
+              <option value="L">Laki-laki</option>
+              <option value="P">Perempuan</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nama Orang Tua / Wali</label>
+            <input type="text" class="form-control" id="siswaOrtu">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">No. Telepon</label>
+            <input type="text" class="form-control" id="siswaTelepon">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  APP.initPage(["admin"]);
+  document.getElementById("btnToggleSidebar")?.addEventListener("click", () => {
+    document.getElementById("sidebar").classList.toggle("show");
+  });
+
+  let daftarKelas = [];
+  let daftarSiswa = [];
+  const modalSiswa = new bootstrap.Modal(document.getElementById("modalSiswa"));
+
+  async function loadKelasOptions() {
+    const res = await API.getKelas();
+    daftarKelas = res.data;
+    const filter = document.getElementById("filterKelas");
+    const select = document.getElementById("siswaKelas");
+    daftarKelas.forEach(k => {
+      filter.innerHTML += `<option value="${k.id}">${k.nama}</option>`;
+      select.innerHTML += `<option value="${k.id}">${k.nama}</option>`;
+    });
+  }
+
+  function renderSiswa(data) {
+    const tbody = document.getElementById("tblSiswa");
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-4">Tidak ada data siswa</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map(s => `
+      <tr>
+        <td>${s.nis}</td>
+        <td>${s.nama}</td>
+        <td>${s.namaKelas || "-"}</td>
+        <td>${s.jk === "L" ? "Laki-laki" : "Perempuan"}</td>
+        <td>${APP.formatRupiah(s.saldo)}</td>
+        <td><span class="badge ${s.status === "aktif" ? "bg-success" : "bg-secondary"}">${s.status || "aktif"}</span></td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary btnEdit" data-id="${s.id}"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-sm btn-outline-danger btnHapus" data-id="${s.id}"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>`).join("");
+
+    tbody.querySelectorAll(".btnEdit").forEach(btn => btn.addEventListener("click", () => editSiswa(btn.dataset.id)));
+    tbody.querySelectorAll(".btnHapus").forEach(btn => btn.addEventListener("click", () => hapusSiswa(btn.dataset.id)));
+  }
+
+  async function loadSiswa() {
+    try {
+      const res = await API.getSiswa();
+      daftarSiswa = res.data;
+      renderSiswa(daftarSiswa);
+    } catch (err) { console.error(err); }
+  }
+
+  function applyFilter() {
+    const keyword = document.getElementById("searchSiswa").value.toLowerCase();
+    const kelasId = document.getElementById("filterKelas").value;
+    const filtered = daftarSiswa.filter(s => {
+      const matchKeyword = s.nama.toLowerCase().includes(keyword) || s.nis.toLowerCase().includes(keyword);
+      const matchKelas = !kelasId || String(s.kelasId) === String(kelasId);
+      return matchKeyword && matchKelas;
+    });
+    renderSiswa(filtered);
+  }
+
+  document.getElementById("searchSiswa").addEventListener("input", APP.debounce(applyFilter, 250));
+  document.getElementById("filterKelas").addEventListener("change", applyFilter);
+
+  document.getElementById("btnTambahSiswa").addEventListener("click", () => {
+    document.getElementById("formSiswa").reset();
+    document.getElementById("siswaId").value = "";
+    document.getElementById("modalSiswaTitle").textContent = "Tambah Siswa";
+    modalSiswa.show();
+  });
+
+  function editSiswa(id) {
+    const s = daftarSiswa.find(x => String(x.id) === String(id));
+    if (!s) return;
+    document.getElementById("siswaId").value = s.id;
+    document.getElementById("siswaNis").value = s.nis;
+    document.getElementById("siswaNama").value = s.nama;
+    document.getElementById("siswaKelas").value = s.kelasId;
+    document.getElementById("siswaJk").value = s.jk;
+    document.getElementById("siswaOrtu").value = s.namaOrtu || "";
+    document.getElementById("siswaTelepon").value = s.telepon || "";
+    document.getElementById("modalSiswaTitle").textContent = "Edit Siswa";
+    modalSiswa.show();
+  }
+
+  function hapusSiswa(id) {
+    Swal.fire({
+      title: "Hapus siswa ini?",
+      text: "Data yang dihapus tidak dapat dikembalikan.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Ya, Hapus",
+      confirmButtonColor: "#e63946"
+    }).then(async result => {
+      if (!result.isConfirmed) return;
+      APP.loading("Menghapus data...");
+      try {
+        await API.hapusSiswa(id);
+        APP.closeLoading();
+        APP.toast("success", "Siswa berhasil dihapus");
+        loadSiswa();
+      } catch (err) { APP.closeLoading(); }
+    });
+  }
+
+  document.getElementById("formSiswa").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const payload = {
+      id: document.getElementById("siswaId").value,
+      nis: document.getElementById("siswaNis").value.trim(),
+      nama: document.getElementById("siswaNama").value.trim(),
+      kelasId: document.getElementById("siswaKelas").value,
+      jk: document.getElementById("siswaJk").value,
+      namaOrtu: document.getElementById("siswaOrtu").value.trim(),
+      telepon: document.getElementById("siswaTelepon").value.trim()
+    };
+    APP.loading("Menyimpan data...");
+    try {
+      if (payload.id) await API.updateSiswa(payload);
+      else await API.tambahSiswa(payload);
+      APP.closeLoading();
+      modalSiswa.hide();
+      APP.toast("success", "Data siswa berhasil disimpan");
+      loadSiswa();
+    } catch (err) { APP.closeLoading(); }
+  });
+
+  (async function init() {
+    await loadKelasOptions();
+    await loadSiswa();
+  })();
+</script>
+</body>
+</html>

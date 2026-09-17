@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>App Sekolah Menabung</title>
+<meta http-equiv="refresh" content="0; url=login.html">
+</head>
+<body>
+<script>
+  // Redirect otomatis: jika sudah login -> dashboard, jika belum -> login
+  (function () {
+    const session = sessionStorage.getItem("asm_session");
+    window.location.replace(session ? "dashboard.html" : "login.html");
+  })();
+</script>
+<p>Mengalihkan...</p>
+</body>
+</html>

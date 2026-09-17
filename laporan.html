@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Tabungan - App Sekolah Menabung</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+  <aside class="sidebar no-print" id="sidebar">
+    <div class="sidebar-brand"><i class="fa-solid fa-piggy-bank"></i> Sekolah Menabung</div>
+    <nav class="nav flex-column py-2">
+      <a class="nav-link" href="dashboard.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+      <div class="nav-section-title">Data Master</div>
+      <a class="nav-link" href="siswa.html" data-role="admin"><i class="fa-solid fa-user-graduate"></i> Data Siswa</a>
+      <a class="nav-link" href="kelas.html" data-role="admin"><i class="fa-solid fa-chalkboard"></i> Data Kelas</a>
+      <a class="nav-link" href="pengguna.html" data-role="admin"><i class="fa-solid fa-users-gear"></i> Data Pengguna</a>
+      <div class="nav-section-title">Tabungan</div>
+      <a class="nav-link" href="transaksi.html" data-role="admin,petugas"><i class="fa-solid fa-money-bill-transfer"></i> Transaksi</a>
+      <a class="nav-link" href="tabungan.html"><i class="fa-solid fa-book"></i> Buku Tabungan</a>
+      <a class="nav-link active" href="laporan.html" data-role="admin,petugas,walikelas"><i class="fa-solid fa-chart-line"></i> Laporan</a>
+      <div class="nav-section-title">Akun</div>
+      <a class="nav-link" href="profil.html"><i class="fa-solid fa-id-card"></i> Profil</a>
+      <a class="nav-link" href="pengaturan.html" data-role="admin"><i class="fa-solid fa-gear"></i> Pengaturan</a>
+      <a class="nav-link" href="#" id="btnLogout"><i class="fa-solid fa-right-from-bracket"></i> Keluar</a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar no-print">
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-sm btn-outline-secondary d-lg-none" id="btnToggleSidebar"><i class="fa-solid fa-bars"></i></button>
+        <h5 class="mb-0 fw-bold">Laporan Tabungan</h5>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <div class="text-end d-none d-sm-block">
+          <div class="fw-semibold user-display-name">-</div>
+          <div class="small text-muted user-display-role">-</div>
+        </div>
+        <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <div class="card mb-3 no-print">
+        <div class="card-body">
+          <div class="row g-2 align-items-end">
+            <div class="col-md-2">
+              <label class="form-label mb-1">Periode</label>
+              <select class="form-select" id="periodeSelect">
+                <option value="hari">Hari Ini</option>
+                <option value="minggu">Minggu Ini</option>
+                <option value="bulan" selected>Bulan Ini</option>
+                <option value="tahun">Tahun Ini</option>
+                <option value="rentang">Rentang Tanggal</option>
+              </select>
+            </div>
+            <div class="col-md-2 periode-rentang" style="display:none">
+              <label class="form-label mb-1">Dari</label>
+              <input type="date" class="form-control" id="dariTanggal">
+            </div>
+            <div class="col-md-2 periode-rentang" style="display:none">
+              <label class="form-label mb-1">Sampai</label>
+              <input type="date" class="form-control" id="sampaiTanggal">
+            </div>
+            <div class="col-md-2">
+              <label class="form-label mb-1">Kelas</label>
+              <select class="form-select" id="filterKelasLaporan"><option value="">Semua Kelas</option></select>
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-primary w-100" id="btnGenerateLaporan"><i class="fa-solid fa-magnifying-glass me-1"></i>Tampilkan</button>
+            </div>
+            <div class="col-md-2 d-flex gap-1">
+              <button class="btn btn-outline-secondary flex-fill" onclick="window.print()"><i class="fa-solid fa-print"></i></button>
+              <button class="btn btn-outline-success flex-fill" id="btnExportExcel"><i class="fa-solid fa-file-excel"></i></button>
+              <button class="btn btn-outline-danger flex-fill" id="btnExportPdf"><i class="fa-solid fa-file-pdf"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-3">
+          <div class="stat-card bg-grad-green"><i class="fa-solid fa-arrow-down stat-icon"></i>
+            <div class="stat-label">Total Setoran</div><div class="stat-value" id="lapTotalSetoran">Rp 0</div></div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card bg-grad-red"><i class="fa-solid fa-arrow-up stat-icon"></i>
+            <div class="stat-label">Total Penarikan</div><div class="stat-value" id="lapTotalPenarikan">Rp 0</div></div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card bg-grad-blue"><i class="fa-solid fa-wallet stat-icon"></i>
+            <div class="stat-label">Total Saldo</div><div class="stat-value" id="lapTotalSaldo">Rp 0</div></div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card bg-grad-purple"><i class="fa-solid fa-receipt stat-icon"></i>
+            <div class="stat-label">Jumlah Transaksi</div><div class="stat-value" id="lapJumlahTrx">0</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">Detail Transaksi Periode Terpilih</div>
+        <div class="table-responsive">
+          <table class="table mb-0">
+            <thead><tr><th>Tanggal</th><th>ID</th><th>Siswa</th><th>Kelas</th><th>Jenis</th><th>Nominal</th><th>Petugas</th></tr></thead>
+            <tbody id="tblLaporan"><tr><td colspan="7" class="text-center text-muted py-4">Pilih periode lalu klik Tampilkan</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  APP.initPage(["admin", "petugas", "walikelas"]);
+  document.getElementById("btnToggleSidebar")?.addEventListener("click", () => {
+    document.getElementById("sidebar").classList.toggle("show");
+  });
+
+  const session = AUTH.getSession();
+  let dataLaporan = [];
+
+  document.getElementById("periodeSelect").addEventListener("change", (e) => {
+    document.querySelectorAll(".periode-rentang").forEach(el => el.style.display = e.target.value === "rentang" ? "block" : "none");
+  });
+
+  function hitungRangeTanggal(periode) {
+    const now = new Date();
+    let dari, sampai;
+    if (periode === "hari") {
+      dari = sampai = now.toISOString().slice(0, 10);
+    } else if (periode === "minggu") {
+      const first = new Date(now); first.setDate(now.getDate() - now.getDay());
+      dari = first.toISOString().slice(0, 10);
+      sampai = now.toISOString().slice(0, 10);
+    } else if (periode === "bulan") {
+      dari = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10);
+      sampai = now.toISOString().slice(0, 10);
+    } else if (periode === "tahun") {
+      dari = new Date(now.getFullYear(), 0, 1).toISOString().slice(0, 10);
+      sampai = now.toISOString().slice(0, 10);
+    } else {
+      dari = document.getElementById("dariTanggal").value;
+      sampai = document.getElementById("sampaiTanggal").value;
+    }
+    return { dari, sampai };
+  }
+
+  async function loadKelasFilter() {
+    const res = await API.getKelas();
+    const select = document.getElementById("filterKelasLaporan");
+    res.data.forEach(k => select.innerHTML += `<option value="${k.id}">${k.nama}</option>`);
+    // Wali kelas hanya bisa melihat kelasnya sendiri
+    if (session.role === "walikelas" && session.kelasId) {
+      select.value = session.kelasId;
+      select.disabled = true;
+    }
+  }
+
+  async function generateLaporan() {
+    const periode = document.getElementById("periodeSelect").value;
+    const { dari, sampai } = hitungRangeTanggal(periode);
+    if (!dari || !sampai) return Swal.fire({ icon: "warning", title: "Lengkapi Tanggal", text: "Silakan pilih rentang tanggal." });
+
+    const kelasId = document.getElementById("filterKelasLaporan").value;
+
+    APP.loading("Menyusun laporan...");
+    try {
+      const res = await API.getTransaksi({ dari, sampai, kelasId });
+      APP.closeLoading();
+      dataLaporan = res.data;
+      renderLaporan(dataLaporan);
+    } catch (err) { APP.closeLoading(); }
+  }
+
+  function renderLaporan(data) {
+    const totalSetoran = data.filter(t => t.jenis === "setoran").reduce((a, t) => a + Number(t.nominal), 0);
+    const totalPenarikan = data.filter(t => t.jenis === "penarikan").reduce((a, t) => a + Number(t.nominal), 0);
+
+    document.getElementById("lapTotalSetoran").textContent = APP.formatRupiah(totalSetoran);
+    document.getElementById("lapTotalPenarikan").textContent = APP.formatRupiah(totalPenarikan);
+    document.getElementById("lapTotalSaldo").textContent = APP.formatRupiah(totalSetoran - totalPenarikan);
+    document.getElementById("lapJumlahTrx").textContent = data.length;
+
+    const tbody = document.getElementById("tblLaporan");
+    tbody.innerHTML = data.length ? data.map(t => `
+      <tr>
+        <td>${APP.formatTanggal(t.tanggal)}</td>
+        <td>${t.id}</td>
+        <td>${t.namaSiswa}</td>
+        <td>${t.namaKelas || "-"}</td>
+        <td>${APP.badgeJenis(t.jenis)}</td>
+        <td>${APP.formatRupiah(t.nominal)}</td>
+        <td>${t.petugas}</td>
+      </tr>`).join("") : `<tr><td colspan="7" class="text-center text-muted py-4">Tidak ada transaksi pada periode ini</td></tr>`;
+  }
+
+  document.getElementById("btnGenerateLaporan").addEventListener("click", generateLaporan);
+
+  document.getElementById("btnExportExcel").addEventListener("click", () => {
+    if (!dataLaporan.length) return APP.toast("warning", "Tidak ada data untuk diekspor");
+    let csv = "Tanggal,ID,Siswa,Kelas,Jenis,Nominal,Petugas\n";
+    dataLaporan.forEach(t => {
+      csv += [t.tanggal, t.id, t.namaSiswa, t.namaKelas, t.jenis, t.nominal, t.petugas].join(",") + "\n";
+    });
+    const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `laporan-tabungan-${new Date().toISOString().slice(0,10)}.csv`;
+    link.click();
+  });
+
+  document.getElementById("btnExportPdf").addEventListener("click", () => {
+    APP.toast("info", "Gunakan tombol Cetak (ikon printer) lalu pilih 'Simpan sebagai PDF' di dialog cetak browser.");
+  });
+
+  (async function init() {
+    await loadKelasFilter();
+    generateLaporan();
+  })();
+</script>
+</body>
+</html>

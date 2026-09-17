@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transaksi Tabungan - App Sekolah Menabung</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand"><i class="fa-solid fa-piggy-bank"></i> Sekolah Menabung</div>
+    <nav class="nav flex-column py-2">
+      <a class="nav-link" href="dashboard.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+      <div class="nav-section-title">Data Master</div>
+      <a class="nav-link" href="siswa.html" data-role="admin"><i class="fa-solid fa-user-graduate"></i> Data Siswa</a>
+      <a class="nav-link" href="kelas.html" data-role="admin"><i class="fa-solid fa-chalkboard"></i> Data Kelas</a>
+      <a class="nav-link" href="pengguna.html" data-role="admin"><i class="fa-solid fa-users-gear"></i> Data Pengguna</a>
+      <div class="nav-section-title">Tabungan</div>
+      <a class="nav-link" href="transaksi.html" data-role="admin,petugas"><i class="fa-solid fa-money-bill-transfer"></i> Transaksi</a>
+      <a class="nav-link" href="tabungan.html"><i class="fa-solid fa-book"></i> Buku Tabungan</a>
+      <a class="nav-link" href="laporan.html" data-role="admin,petugas,walikelas"><i class="fa-solid fa-chart-line"></i> Laporan</a>
+      <div class="nav-section-title">Akun</div>
+      <a class="nav-link" href="profil.html"><i class="fa-solid fa-id-card"></i> Profil</a>
+      <a class="nav-link" href="pengaturan.html" data-role="admin"><i class="fa-solid fa-gear"></i> Pengaturan</a>
+      <a class="nav-link" href="#" id="btnLogout"><i class="fa-solid fa-right-from-bracket"></i> Keluar</a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-sm btn-outline-secondary d-lg-none" id="btnToggleSidebar"><i class="fa-solid fa-bars"></i></button>
+        <h5 class="mb-0 fw-bold">Transaksi Tabungan</h5>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <div class="text-end d-none d-sm-block">
+          <div class="fw-semibold user-display-name">-</div>
+          <div class="small text-muted user-display-role">-</div>
+        </div>
+        <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <ul class="nav nav-tabs mb-3" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabSetoran">
+          <i class="fa-solid fa-arrow-down text-success me-1"></i> Setoran</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabPenarikan">
+          <i class="fa-solid fa-arrow-up text-danger me-1"></i> Penarikan</button></li>
+      </ul>
+
+      <div class="tab-content">
+
+        <!-- ===== TAB SETORAN ===== -->
+        <div class="tab-pane fade show active" id="tabSetoran">
+          <div class="card">
+            <div class="card-header">Form Setoran Tabungan</div>
+            <div class="card-body">
+              <form id="formSetoran" class="row g-3">
+                <div class="col-md-3">
+                  <label class="form-label">ID Transaksi</label>
+                  <input type="text" class="form-control" id="setoranId" readonly>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Tanggal</label>
+                  <input type="date" class="form-control" id="setoranTanggal" required>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">NIS Siswa</label>
+                  <input type="text" class="form-control" id="setoranNis" list="listNisSetoran" placeholder="Ketik / pilih NIS" required autocomplete="off">
+                  <datalist id="listNisSetoran"></datalist>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Nama Siswa</label>
+                  <input type="text" class="form-control" id="setoranNama" readonly>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Kelas</label>
+                  <input type="text" class="form-control" id="setoranKelas" readonly>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Saldo Saat Ini</label>
+                  <input type="text" class="form-control" id="setoranSaldoSaatIni" readonly>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Nominal Setoran (Rp)</label>
+                  <input type="number" class="form-control" id="setoranNominal" min="1" required>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Nama Petugas</label>
+                  <input type="text" class="form-control" id="setoranPetugas" readonly>
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label">Keterangan</label>
+                  <input type="text" class="form-control" id="setoranKeterangan" placeholder="Opsional">
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-success"><i class="fa-solid fa-floppy-disk me-1"></i>Simpan Setoran</button>
+                  <button type="reset" class="btn btn-outline-secondary" id="btnResetSetoran">Reset</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== TAB PENARIKAN ===== -->
+        <div class="tab-pane fade" id="tabPenarikan">
+          <div class="card">
+            <div class="card-header">Form Penarikan Tabungan</div>
+            <div class="card-body">
+              <form id="formPenarikan" class="row g-3">
+                <div class="col-md-3">
+                  <label class="form-label">ID Transaksi</label>
+                  <input type="text" class="form-control" id="tarikId" readonly>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Tanggal</label>
+                  <input type="date" class="form-control" id="tarikTanggal" required>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">NIS Siswa</label>
+                  <input type="text" class="form-control" id="tarikNis" list="listNisTarik" placeholder="Ketik / pilih NIS" required autocomplete="off">
+                  <datalist id="listNisTarik"></datalist>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Nama Siswa</label>
+                  <input type="text" class="form-control" id="tarikNama" readonly>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Kelas</label>
+                  <input type="text" class="form-control" id="tarikKelas" readonly>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Saldo Saat Ini</label>
+                  <input type="text" class="form-control" id="tarikSaldoSaatIni" readonly>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Nominal Penarikan (Rp)</label>
+                  <input type="number" class="form-control" id="tarikNominal" min="1" required>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Saldo Setelah Penarikan</label>
+                  <input type="text" class="form-control" id="tarikSaldoSetelah" readonly>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Nama Petugas</label>
+                  <input type="text" class="form-control" id="tarikPetugas" readonly>
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label">Keterangan</label>
+                  <input type="text" class="form-control" id="tarikKeterangan" placeholder="Opsional">
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-danger"><i class="fa-solid fa-floppy-disk me-1"></i>Simpan Penarikan</button>
+                  <button type="reset" class="btn btn-outline-secondary" id="btnResetTarik">Reset</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL BUKTI TRANSAKSI -->
+<div class="modal fade" id="modalBukti" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Bukti Transaksi</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="isiBukti"></div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+        <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print me-1"></i>Cetak</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  APP.initPage(["admin", "petugas"]);
+  document.getElementById("btnToggleSidebar")?.addEventListener("click", () => {
+    document.getElementById("sidebar").classList.toggle("show");
+  });
+
+  const session = AUTH.getSession();
+  let daftarSiswa = [];
+  const modalBukti = new bootstrap.Modal(document.getElementById("modalBukti"));
+
+  async function loadSiswaOptions() {
+    const res = await API.getSiswa();
+    daftarSiswa = res.data;
+    const opt = daftarSiswa.map(s => `<option value="${s.nis}">${s.nama}</option>`).join("");
+    document.getElementById("listNisSetoran").innerHTML = opt;
+    document.getElementById("listNisTarik").innerHTML = opt;
+  }
+
+  function isiOtomatis(nisInputId, prefix) {
+    const nis = document.getElementById(nisInputId).value.trim();
+    const siswa = daftarSiswa.find(s => s.nis === nis);
+    if (!siswa) {
+      document.getElementById(prefix + "Nama").value = "";
+      document.getElementById(prefix + "Kelas").value = "";
+      document.getElementById(prefix + "SaldoSaatIni").value = "";
+      return null;
+    }
+    document.getElementById(prefix + "Nama").value = siswa.nama;
+    document.getElementById(prefix + "Kelas").value = siswa.namaKelas || "-";
+    document.getElementById(prefix + "SaldoSaatIni").value = APP.formatRupiah(siswa.saldo);
+    return siswa;
+  }
+
+  function initForm() {
+    const today = new Date().toISOString().slice(0, 10);
+
+    // Setoran
+    document.getElementById("setoranTanggal").value = today;
+    document.getElementById("setoranId").value = APP.generateTrxId("SETOR");
+    document.getElementById("setoranPetugas").value = session.nama;
+    document.getElementById("setoranNis").addEventListener("change", () => isiOtomatis("setoranNis", "setoran"));
+
+    // Penarikan
+    document.getElementById("tarikTanggal").value = today;
+    document.getElementById("tarikId").value = APP.generateTrxId("TARIK");
+    document.getElementById("tarikPetugas").value = session.nama;
+    document.getElementById("tarikNis").addEventListener("change", () => {
+      const s = isiOtomatis("tarikNis", "tarik");
+      hitungSaldoSetelah();
+    });
+    document.getElementById("tarikNominal").addEventListener("input", hitungSaldoSetelah);
+  }
+
+  function hitungSaldoSetelah() {
+    const nis = document.getElementById("tarikNis").value.trim();
+    const siswa = daftarSiswa.find(s => s.nis === nis);
+    const nominal = Number(document.getElementById("tarikNominal").value) || 0;
+    if (!siswa) { document.getElementById("tarikSaldoSetelah").value = ""; return; }
+    const sisa = siswa.saldo - nominal;
+    document.getElementById("tarikSaldoSetelah").value = APP.formatRupiah(sisa);
+  }
+
+  // ---- SUBMIT SETORAN ----
+  document.getElementById("formSetoran").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const nis = document.getElementById("setoranNis").value.trim();
+    const siswa = daftarSiswa.find(s => s.nis === nis);
+    const nominal = Number(document.getElementById("setoranNominal").value);
+
+    if (!siswa) return Swal.fire({ icon: "warning", title: "NIS Tidak Ditemukan", text: "Pastikan NIS siswa terdaftar." });
+    if (!nominal || nominal <= 0) return Swal.fire({ icon: "warning", title: "Nominal Tidak Valid", text: "Nominal setoran harus lebih dari 0." });
+
+    const payload = {
+      id: document.getElementById("setoranId").value,
+      tanggal: document.getElementById("setoranTanggal").value,
+      nis: siswa.nis,
+      namaSiswa: siswa.nama,
+      kelasId: siswa.kelasId,
+      namaKelas: siswa.namaKelas,
+      nominal,
+      keterangan: document.getElementById("setoranKeterangan").value.trim(),
+      petugas: session.nama
+    };
+
+    APP.loading("Menyimpan setoran...");
+    try {
+      const res = await API.tambahSetoran(payload);
+      APP.closeLoading();
+      Swal.fire({ icon: "success", title: "Setoran Berhasil", text: `Setoran ${APP.formatRupiah(nominal)} untuk ${siswa.nama} tersimpan.` });
+      tampilkanBukti({ ...payload, jenis: "Setoran", saldoAkhir: res.data.saldoAkhir });
+      document.getElementById("formSetoran").reset();
+      document.getElementById("setoranId").value = APP.generateTrxId("SETOR");
+      document.getElementById("setoranTanggal").value = new Date().toISOString().slice(0, 10);
+      document.getElementById("setoranPetugas").value = session.nama;
+      await loadSiswaOptions();
+    } catch (err) { APP.closeLoading(); }
+  });
+
+  // ---- SUBMIT PENARIKAN ----
+  document.getElementById("formPenarikan").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const nis = document.getElementById("tarikNis").value.trim();
+    const siswa = daftarSiswa.find(s => s.nis === nis);
+    const nominal = Number(document.getElementById("tarikNominal").value);
+
+    if (!siswa) return Swal.fire({ icon: "warning", title: "NIS Tidak Ditemukan", text: "Pastikan NIS siswa terdaftar." });
+    if (!nominal || nominal <= 0) return Swal.fire({ icon: "warning", title: "Nominal Tidak Valid", text: "Nominal penarikan harus lebih dari 0." });
+    if (nominal > siswa.saldo) return Swal.fire({ icon: "error", title: "Saldo Tidak Cukup", text: "Nominal penarikan melebihi saldo siswa." });
+
+    const payload = {
+      id: document.getElementById("tarikId").value,
+      tanggal: document.getElementById("tarikTanggal").value,
+      nis: siswa.nis,
+      namaSiswa: siswa.nama,
+      kelasId: siswa.kelasId,
+      namaKelas: siswa.namaKelas,
+      nominal,
+      keterangan: document.getElementById("tarikKeterangan").value.trim(),
+      petugas: session.nama
+    };
+
+    APP.loading("Menyimpan penarikan...");
+    try {
+      const res = await API.tambahPenarikan(payload);
+      APP.closeLoading();
+      Swal.fire({ icon: "success", title: "Penarikan Berhasil", text: `Penarikan ${APP.formatRupiah(nominal)} untuk ${siswa.nama} berhasil.` });
+      tampilkanBukti({ ...payload, jenis: "Penarikan", saldoAkhir: res.data.saldoAkhir });
+      document.getElementById("formPenarikan").reset();
+      document.getElementById("tarikId").value = APP.generateTrxId("TARIK");
+      document.getElementById("tarikTanggal").value = new Date().toISOString().slice(0, 10);
+      document.getElementById("tarikPetugas").value = session.nama;
+      await loadSiswaOptions();
+    } catch (err) { APP.closeLoading(); }
+  });
+
+  function tampilkanBukti(data) {
+    document.getElementById("isiBukti").innerHTML = `
+      <div class="text-center mb-3">
+        <i class="fa-solid fa-piggy-bank fa-2x text-primary"></i>
+        <h5 class="mt-2 mb-0">Bukti Transaksi Tabungan</h5>
+        <div class="text-muted small">App Sekolah Menabung</div>
+      </div>
+      <table class="table table-sm table-borderless mb-0">
+        <tr><td class="text-muted">ID Transaksi</td><td class="text-end fw-semibold">${data.id}</td></tr>
+        <tr><td class="text-muted">Tanggal</td><td class="text-end">${APP.formatTanggal(data.tanggal)}</td></tr>
+        <tr><td class="text-muted">Jenis</td><td class="text-end">${data.jenis}</td></tr>
+        <tr><td class="text-muted">Nama Siswa</td><td class="text-end">${data.namaSiswa}</td></tr>
+        <tr><td class="text-muted">NIS</td><td class="text-end">${data.nis}</td></tr>
+        <tr><td class="text-muted">Kelas</td><td class="text-end">${data.namaKelas}</td></tr>
+        <tr><td class="text-muted">Nominal</td><td class="text-end fw-bold">${APP.formatRupiah(data.nominal)}</td></tr>
+        <tr><td class="text-muted">Saldo Akhir</td><td class="text-end fw-bold text-primary">${APP.formatRupiah(data.saldoAkhir)}</td></tr>
+        <tr><td class="text-muted">Petugas</td><td class="text-end">${data.petugas}</td></tr>
+        <tr><td class="text-muted">Keterangan</td><td class="text-end">${data.keterangan || "-"}</td></tr>
+      </table>`;
+    modalBukti.show();
+  }
+
+  (async function init() {
+    await loadSiswaOptions();
+    initForm();
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+/* ==========================================================================
+   App Sekolah Menabung - style.css
+   Tema: Pendidikan, Keuangan, Aman, Profesional
+   ========================================================================== */
+
+:root {
+  --asm-primary: #0d3b66;      /* biru dongker - kepercayaan/keuangan */
+  --asm-primary-light: #145da0;
+  --asm-secondary: #1b998b;    /* hijau teal - pertumbuhan/tabungan */
+  --asm-accent: #f4a261;       /* aksen hangat */
+  --asm-success: #2a9d8f;
+  --asm-danger: #e63946;
+  --asm-warning: #f4a261;
+  --asm-bg: #f5f7fa;
+  --asm-card-radius: 14px;
+  --asm-sidebar-width: 260px;
+}
+
+body {
+  background-color: var(--asm-bg);
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #1f2933;
+}
+
+/* ---------- Layout ---------- */
+.app-wrapper { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: var(--asm-sidebar-width);
+  background: linear-gradient(180deg, var(--asm-primary) 0%, #072541 100%);
+  color: #fff;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  overflow-y: auto;
+  z-index: 1030;
+  transition: transform .25s ease;
+}
+
+.sidebar-brand {
+  display: flex; align-items: center; gap: .6rem;
+  padding: 1.25rem 1.25rem;
+  font-weight: 700; font-size: 1.1rem;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+.sidebar-brand i { color: var(--asm-accent); font-size: 1.5rem; }
+
+.sidebar .nav-link {
+  color: rgba(255,255,255,.75);
+  padding: .7rem 1.25rem;
+  font-size: .93rem;
+  border-left: 3px solid transparent;
+  display: flex; align-items: center; gap: .7rem;
+}
+.sidebar .nav-link i { width: 20px; text-align: center; }
+.sidebar .nav-link:hover { background: rgba(255,255,255,.06); color: #fff; }
+.sidebar .nav-link.active {
+  background: rgba(255,255,255,.1);
+  color: #fff;
+  border-left-color: var(--asm-accent);
+  font-weight: 600;
+}
+.sidebar .nav-section-title {
+  padding: 1rem 1.25rem .3rem;
+  font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
+  color: rgba(255,255,255,.45);
+}
+
+.main-content {
+  margin-left: var(--asm-sidebar-width);
+  flex: 1;
+  min-height: 100vh;
+}
+
+.topbar {
+  background: #fff;
+  border-bottom: 1px solid #e5e9f0;
+  padding: .8rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 1020;
+}
+
+.page-body { padding: 1.5rem; }
+
+@media (max-width: 991.98px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.show { transform: translateX(0); }
+  .main-content { margin-left: 0; }
+}
+
+/* ---------- Cards / Stat cards ---------- */
+.stat-card {
+  border: none;
+  border-radius: var(--asm-card-radius);
+  padding: 1.25rem;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+}
+.stat-card .stat-icon {
+  position: absolute; right: 1rem; top: 1rem;
+  font-size: 2.2rem; opacity: .35;
+}
+.stat-card .stat-value { font-size: 1.6rem; font-weight: 700; }
+.stat-card .stat-label { font-size: .85rem; opacity: .9; }
+
+.bg-grad-blue { background: linear-gradient(135deg, #145da0, #0d3b66); }
+.bg-grad-green { background: linear-gradient(135deg, #2a9d8f, #1b998b); }
+.bg-grad-orange { background: linear-gradient(135deg, #f4a261, #e76f51); }
+.bg-grad-red { background: linear-gradient(135deg, #e63946, #a4161a); }
+.bg-grad-purple { background: linear-gradient(135deg, #6d597a, #355070); }
+.bg-grad-teal { background: linear-gradient(135deg, #219ebc, #023047); }
+
+.card {
+  border: none;
+  border-radius: var(--asm-card-radius);
+  box-shadow: 0 4px 14px rgba(0,0,0,.05);
+}
+.card-header {
+  background: #fff;
+  border-bottom: 1px solid #eef1f5;
+  font-weight: 600;
+  border-radius: var(--asm-card-radius) var(--asm-card-radius) 0 0 !important;
+}
+
+/* ---------- Login ---------- */
+.login-wrapper {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--asm-primary) 0%, var(--asm-secondary) 100%);
+  padding: 1rem;
+}
+.login-card {
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 20px 50px rgba(0,0,0,.25);
+}
+.login-illustration {
+  background: linear-gradient(160deg, var(--asm-primary), #062038);
+  color: #fff;
+  padding: 3rem 2.5rem;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.login-form-side { padding: 3rem 2.5rem; }
+
+/* ---------- Tables ---------- */
+.table thead th {
+  background-color: #f1f5f9;
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: #475569;
+  border-bottom: 2px solid #e2e8f0;
+}
+.table td, .table th { vertical-align: middle; }
+
+/* ---------- Misc ---------- */
+.badge-role-admin { background: var(--asm-primary); }
+.badge-role-petugas { background: var(--asm-secondary); }
+.badge-role-walikelas { background: var(--asm-accent); color: #1f2933; }
+.badge-role-siswa { background: #6d597a; }
+
+.saldo-display {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--asm-primary);
+}
+
+.buku-tabungan-header {
+  background: linear-gradient(135deg, var(--asm-primary), var(--asm-secondary));
+  color: #fff;
+  border-radius: var(--asm-card-radius);
+  padding: 1.5rem;
+}
+
+.print-only { display: none; }
+@media print {
+  .sidebar, .topbar, .no-print, .btn { display: none !important; }
+  .main-content { margin-left: 0 !important; }
+  .print-only { display: block; }
+  body { background: #fff; }
+}
+
+.brand-loader {
+  display: flex; align-items: center; justify-content: center;
+  height: 100vh; flex-direction: column; gap: 1rem; color: var(--asm-primary);
+}
